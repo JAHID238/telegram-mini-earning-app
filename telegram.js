@@ -1,9 +1,7 @@
 const tg = window.Telegram.WebApp;
+tg.ready();
 
-function initTelegram() {
-    tg.ready();
-    const user = tg.initDataUnsafe?.user; // Telegram user info
-    console.log("Logged in as:", user.first_name, user.id);
-}
+const user = tg.initDataUnsafe?.user;
+window.tgUserId = user.id;
 
-initTelegram();
+document.getElementById('welcome').innerText = Welcome, ${user.first_name};
