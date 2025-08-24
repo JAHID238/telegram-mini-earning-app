@@ -1,21 +1,34 @@
-const express = require('express');
-const router = express.Router();
-const Task = require('../models/Task');
-const User = require('../models/User');
+<!-- Task Page -->
+<div id="ad-task">
+  <h3>Watch Ad to Earn 10 Coins</h3>
 
-// Example: Complete a task
-router.post('/complete', async (req, res) => {
-    const { userId, taskId } = req.body;
+  <button onclick="showAd()">Start Task</button>
+  <div id="ad-box" style="margin-top:10px; display:none;">
+      <script type="text/javascript">
+          atOptions = {
+              'key' : '6928b0f5b1a27066c76882257e555423',
+              'format' : 'iframe',
+              'height' : 250,
+              'width' : 300,
+              'params' : {}
+          };
+      </script>
+      <script type="text/javascript" src="//www.highperformanceformat.com/6928b0f5b1a27066c76882257e555423/invoke.js"></script>
+  </div>
+</div>
 
-    const task = await Task.findById(taskId);
-    const user = await User.findById(userId);
+<script>
+function showAd() {
+    document.getElementById("ad-box").style.display = "block";
 
-    if(task && user){
-        user.coins += task.coinsReward;
-        await user.save();
-        return res.json({ success: true, coins: user.coins });
-    }
-    res.json({ success: false });
-});
-
-module.exports = router;
+    // ধরো ad দেখানো শুরু হলো → 5 সেকেন্ড পর backend এ call যাবে
+    setTimeout(() => {
+        fetch("/api/task-complete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ userId: "telegram_123", coins: 10 })
+        });
+        alert("✅ You earned 10 coins!");
+    }, 5000);
+}
+</script>
